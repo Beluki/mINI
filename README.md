@@ -3,10 +3,8 @@
 
 mINI is a very minimal [INI][] reader. I wrote it because I needed to
 populate a ContextMenuStrip at runtime from an INI file each time the
-user clicks on it.
-
-Most readers I tried were either overkill, too slow for realtime reloading
-or didn't support nested sections.
+user clicks on it. Most readers I tried were either overkill, too slow
+for realtime reloading or didn't support nested sections.
 
 mINI is stateless and does nothing by itself. It doesn't build data
 structures to hold the INI file contents either. It's an abstract class
@@ -14,9 +12,9 @@ with a bunch of virtual methods. You override the methods to decide what
 to do with your data.
 
 For example, you override `OnSection(String section)` to do something when
-a section is found or you override `OnValueEmpty(String key)` to report
-an error when a key has no value. The default implementation for all methods
-does nothing, so you only need to override the ones you want to handle.
+a section is found or `OnValueEmpty(String key)` to report an error when
+a key has no value. The default implementation for all methods does nothing,
+so you only need to override the ones you want to handle.
 
 [INI]: http://en.wikipedia.org/wiki/INI_file
 
@@ -30,7 +28,7 @@ mINI supports the following syntax:
 
 ; another comment, semicolon syntax
 
-key = value at root
+key with spaces = value at root
 
 [section]
 key = value
@@ -41,7 +39,7 @@ key = value
 ```
 
 Spaces are trimmed around sections, keys and values before calling methods.
-Blank lines can trigger custom actions with OnEmpty(). Case sensitivity
+Blank lines can trigger custom actions too with `OnEmpty()`. Case sensitivity
 and duplicate sections are allowed, it's up to the implementation class
 to decide what to do with them.
 
