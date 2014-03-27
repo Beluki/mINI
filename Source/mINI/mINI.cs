@@ -159,9 +159,9 @@ namespace mINI
             if (!line.Contains("="))
                 return false;
 
-            String[] pair = line.Split('=');
-            String key = pair[0];
-            String value = pair[1];
+            String[] pair = line.Split(new char[] { '=' }, 2);
+            String key = pair[0].Trim();
+            String value = pair[1].Trim();
 
             if (key == String.Empty)
                 OnKeyEmpty(value);
