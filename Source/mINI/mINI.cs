@@ -25,13 +25,20 @@ namespace mINI
         /// Called when the current line is a section,
         /// before reading subsections.
         /// Can be used for two main purposes:
-        /// Noticing each new section and creating INI readers
-        /// that don't allow subsections.
+        /// Notice that we are entering a new section.
+        /// Creating INI readers that don't support subsections.
         /// </summary>
         /// <param name="section">
-        /// Section path, including subsections. Example: "a/b/c/d".
+        /// Section path, including subsections and whitespace.
+        /// Example: "a/b /c/  d".
         /// </param>
         protected virtual void OnSection(String section) {}
+
+        /// <summary>
+        /// Called when a section name is empty, not including subsections.
+        /// This method is called before calling OnSection.
+        /// </summary>
+        protected virtual void OnSectionEmpty() {}
 
         /// <summary>
         /// Called each time a subsection is found in a section line.
@@ -48,11 +55,11 @@ namespace mINI
         protected virtual void OnSubSection(String section, String path) {}
 
         /// <summary>
-        /// Called when a section or a subsection name is empty.
+        /// Called when a subsection name is empty.
+        /// This method is called before calling OnSubSection.
         /// </summary>
-        /// <param name="section">Section name.</param>
-        /// <param name="path">Complete section path, including parents.</param>
-        protected virtual void OnSectionEmpty(String section, String path) {}
+        /// <param name="path">Section path, including parents.</param>
+        protected virtual void OnSubSectionEmpty(String path) {}
 
         /// <summary>
         /// Called when the current line is a key=value pair.
@@ -63,12 +70,14 @@ namespace mINI
 
         /// <summary>
         /// Called when a key is empty in a key=value pair.
+        /// This method is called before calling OnKeyValue.
         /// </summary>
         /// <param name="value">Value associated with the key.</param>
         protected virtual void OnKeyEmpty(String value) {}
 
         /// <summary>
         /// Called when a value is empty in a key=value pair.
+        /// This method is called before calling OnKeyValue.
         /// </summary>
         /// <param name="key">Key specified for the value.</param>
         protected virtual void OnValueEmpty(String key) {}
@@ -108,18 +117,22 @@ namespace mINI
             if (!(line.StartsWith("[") && line.EndsWith("]")))
                 return false;
 
-            // trim and report that we are entering a section:
+            // first, handle the whole section:
             String section = line.Substring(1, line.Length - 2).Trim();
+
+            if (section == String.Empty)
+                OnSectionEmpty();
+
             OnSection(section);
 
+            // now, subsections:
             String[] subsections = section.Split('/');
 
-            // first section is special
-            // no separator, name/path identical:
+            // first one is special, no separator, name/path identical:
             String path = subsections[0].Trim();
 
             if (path == String.Empty)
-                OnSectionEmpty(path, path);
+                OnSubSectionEmpty(path);
 
             OnSubSection(path, path);
 
@@ -130,7 +143,7 @@ namespace mINI
                 path += "/" + subsection;
 
                 if (subsection == String.Empty)
-                    OnSectionEmpty(subsection, path);
+                    OnSubSectionEmpty(path);
 
                 OnSubSection(subsection, path);
             }
