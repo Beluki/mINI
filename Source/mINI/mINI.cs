@@ -108,19 +108,15 @@ namespace mINI
             if (!(line.StartsWith("[") && line.EndsWith("]")))
                 return false;
 
-            // split into subsection names and trim:
-            String[] sections = line.Substring(1, line.Length - 2).Split('/');
-
-            for (Int32 i = 0; i < sections.Length; i++)
-                sections[i] = sections[i].Trim();
-
-            // report complete path with all subsections trimmed:
-            String section = String.Join("/", sections);
+            // trim and report that we are entering a section:
+            String section = line.Substring(1, line.Length - 2).Trim();
             OnSection(section);
 
-            // now handle subsections
-            // first section is special, no separator:
-            String path = sections[0];
+            String[] subsections = section.Split('/');
+
+            // first section is special
+            // no separator, name/path identical:
+            String path = subsections[0].Trim();
 
             if (path == String.Empty)
                 OnSectionEmpty(path, path);
@@ -128,17 +124,16 @@ namespace mINI
             OnSubSection(path, path);
 
             // rest of sections, accumulate path:
-            for (Int32 i = 1; i < sections.Length; i++)
+            for (Int32 i = 1; i < subsections.Length; i++)
             {
-                String subsection = sections[i];
-                path = path + "/" + subsection;
+                String subsection = subsections[i].Trim();
+                path += "/" + subsection;
 
                 if (subsection == String.Empty)
                     OnSectionEmpty(subsection, path);
 
                 OnSubSection(subsection, path);
             }
-
             return true;
         }
 
