@@ -118,11 +118,20 @@ namespace mINI
             String section = String.Join("/", sections);
             OnSection(section);
 
-            // iterate all the nested subsections:
-            String path = String.Empty;
-            foreach (String subsection in sections)
+            // now handle subsections
+            // first section is special, no separator:
+            String path = sections[0];
+
+            if (path == String.Empty)
+                OnSectionEmpty(path, path);
+
+            OnSubSection(path, path);
+
+            // rest of sections, accumulate path:
+            for (Int32 i = 1; i < sections.Length; i++)
             {
-                path = String.Join("/", path, subsection);
+                String subsection = sections[i];
+                path = path + "/" + subsection;
 
                 if (subsection == String.Empty)
                     OnSectionEmpty(subsection, path);
@@ -160,7 +169,7 @@ namespace mINI
         /// Try to read an INI line.
         /// </summary>
         /// <param name="line">Input line.</param>
-        private Boolean ReadLine(String line)
+        public Boolean ReadLine(String line)
         {
             String text = line.Trim();
 
