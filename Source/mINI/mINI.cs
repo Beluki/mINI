@@ -18,8 +18,8 @@ namespace mINI
         /// <summary>
         /// Called when the current line is a comment.
         /// </summary>
-        /// <param name="line">Complete line, comment prefix included.</param>
-        protected virtual void OnComment(String line) {}
+        /// <param name="text">Comment text, prefix (; or #) included.</param>
+        protected virtual void OnComment(String text) {}
 
         /// <summary>
         /// Called when the current line is a section,
@@ -82,13 +82,13 @@ namespace mINI
         /// <summary>
         /// Called when the reader is unable to read the current line.
         /// </summary>
-        /// <param name="line">Complete line.</param>
+        /// <param name="line">Complete input line, not trimmed.</param>
         protected virtual void OnUnknown(String line) {}
 
         /// <summary>
         /// Try to read an empty line.
         /// </summary>
-        /// <param name="line">Input line.</param>
+        /// <param name="line">Input line, trimmed.</param>
         private Boolean ReadEmpty(String line)
         {
             if (line != String.Empty)
@@ -101,7 +101,7 @@ namespace mINI
         /// <summary>
         /// Try to read a comment.
         /// </summary>
-        /// <param name="line">Input line.</param>
+        /// <param name="line">Input line, trimmed.</param>
         private Boolean ReadComment(String line)
         {
             if (!(line.StartsWith("#") || line.StartsWith(";")))
@@ -114,7 +114,7 @@ namespace mINI
         /// <summary>
         /// Try to read a (possibly nested) section.
         /// </summary>
-        /// <param name="line">Input line.</param>
+        /// <param name="line">Input line, trimmed.</param>
         private Boolean ReadSection(String line)
         {
             if (!(line.StartsWith("[") && line.EndsWith("]")))
@@ -133,7 +133,7 @@ namespace mINI
         /// <summary>
         /// Read subsections in a given section.
         /// </summary>
-        /// <param name="section">Section name.</param>
+        /// <param name="section">Section name, trimmed.</param>
         private void ReadSubSections(String section)
         {
             String[] subsections = section.Split('/');
@@ -162,7 +162,7 @@ namespace mINI
         /// <summary>
         /// Try to read a key=value pair.
         /// </summary>
-        /// <param name="line">Input line.</param>
+        /// <param name="line">Input line, trimmed.</param>
         private Boolean ReadKeyValue(String line)
         {
             if (!line.Contains("="))
@@ -188,12 +188,12 @@ namespace mINI
         /// <param name="line">Input line.</param>
         public void ReadLine(String line)
         {
-            String text = line.Trim();
+            String trimmed_line = line.Trim();
 
-            if ((ReadEmpty(text)
-               || ReadComment(text)
-               || ReadSection(text)
-               || ReadKeyValue(text)))
+            if ((ReadEmpty(trimmed_line)
+               || ReadComment(trimmed_line)
+               || ReadSection(trimmed_line)
+               || ReadKeyValue(trimmed_line)))
                 return;
 
             // not trimmed:
