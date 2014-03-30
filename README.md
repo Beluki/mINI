@@ -23,17 +23,14 @@ so you only need to override the ones you want to handle.
 mINI supports the following syntax:
 
 ```ini
-
 # comment
-
-; another comment, semicolon syntax
-
 key with spaces = value at root
 
 [section]
 key = value
 key = value
 
+; another comment, semicolon syntax
 [section/subsection/more subsections]
 key = value
 ```

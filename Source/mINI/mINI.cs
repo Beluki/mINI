@@ -24,13 +24,10 @@ namespace mINI
         /// <summary>
         /// Called when the current line is a section,
         /// before reading subsections.
-        /// Can be used for two main purposes:
-        /// Notice that we are entering a new section.
-        /// Creating INI readers that don't support subsections.
         /// </summary>
         /// <param name="section">
-        /// Section path, including subsections and whitespace.
-        /// Example: "a/b /c/  d".
+        /// Complete section name, regardless of subsections
+        /// and inner whitespace. Example: "a/b /c/  d".
         /// </param>
         protected virtual void OnSection(String section) {}
 
@@ -43,16 +40,16 @@ namespace mINI
         /// <summary>
         /// Called each time a subsection is found in a section line.
         /// <para>
-        /// For example, for a line such as: [a/b/c], this method
-        /// will be called 3 times with the following arguments:
+        /// Example: for a line such as: [a/b/c], this method
+        /// is called 3 times with the following arguments:
         /// </para>
         /// <para> OnSubSection("a", "a") </para>
         /// <para> OnSubSection("b", "a/b") </para>
         /// <para> OnSubSection("c", "a/b/c") </para>
         /// </summary>
-        /// <param name="section">Section name.</param>
-        /// <param name="path">Section path, including parents.</param>
-        protected virtual void OnSubSection(String section, String path) {}
+        /// <param name="subsection">Subsection name.</param>
+        /// <param name="path">Subsection path, including parents.</param>
+        protected virtual void OnSubSection(String subsection, String path) {}
 
         /// <summary>
         /// Called when a subsection name is empty.
@@ -81,6 +78,12 @@ namespace mINI
         /// </summary>
         /// <param name="key">Key specified for the value.</param>
         protected virtual void OnValueEmpty(String key) {}
+
+        /// <summary>
+        /// Called when the reader is unable to read the current line.
+        /// </summary>
+        /// <param name="line">Complete line.</param>
+        protected virtual void OnUnknown(String line) {}
 
         /// <summary>
         /// Try to read an empty line.
@@ -117,18 +120,25 @@ namespace mINI
             if (!(line.StartsWith("[") && line.EndsWith("]")))
                 return false;
 
-            // first, handle the whole section:
             String section = line.Substring(1, line.Length - 2).Trim();
 
             if (section == String.Empty)
                 OnSectionEmpty();
 
             OnSection(section);
+            ReadSubSections(section);
+            return true;
+        }
 
-            // now, subsections:
+        /// <summary>
+        /// Read subsections in a given section.
+        /// </summary>
+        /// <param name="section">Section name.</param>
+        private void ReadSubSections(String section)
+        {
             String[] subsections = section.Split('/');
 
-            // first one is special, no separator, name/path identical:
+            // first subsection is special, no separator, name/path identical:
             String path = subsections[0].Trim();
 
             if (path == String.Empty)
@@ -136,7 +146,7 @@ namespace mINI
 
             OnSubSection(path, path);
 
-            // rest of sections, accumulate path:
+            // accumulate path:
             for (Int32 i = 1; i < subsections.Length; i++)
             {
                 String subsection = subsections[i].Trim();
@@ -147,7 +157,6 @@ namespace mINI
 
                 OnSubSection(subsection, path);
             }
-            return true;
         }
 
         /// <summary>
@@ -174,17 +183,21 @@ namespace mINI
         }
 
         /// <summary>
-        /// Try to read an INI line.
+        /// Read an INI line.
         /// </summary>
         /// <param name="line">Input line.</param>
-        public Boolean ReadLine(String line)
+        public void ReadLine(String line)
         {
             String text = line.Trim();
 
-            return ReadEmpty(line)
-                || ReadComment(line)
-                || ReadSection(line)
-                || ReadKeyValue(line);
+            if ((ReadEmpty(text)
+               || ReadComment(text)
+               || ReadSection(text)
+               || ReadKeyValue(text)))
+                return;
+
+            // not trimmed:
+            OnUnknown(line);
         }
     }
 }

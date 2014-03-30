@@ -1,6 +1,12 @@
 
 CHANGELOG
 
+* 2014/03/30:
+
+    - Bugfixes, lines were not trimmed due to a typo.
+
+    - Added OnUnknown() instead of ReadLine returning a boolean.
+
 * 2014/03/27:
 
     - First version.
