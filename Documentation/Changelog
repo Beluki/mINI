@@ -1,6 +1,10 @@
 
 CHANGELOG
 
+* 2014/04/04:
+
+    - Revised. No outstanding bugs.
+
 * 2014/03/30:
 
     - Bugfixes, lines were not trimmed due to a typo.

@@ -36,9 +36,13 @@ key = value
 ```
 
 Spaces are trimmed around sections, keys and values before calling methods.
-Blank lines can trigger custom actions too with `OnEmpty()`. Case sensitivity
+Blank lines can trigger custom actions with `OnEmpty()`. Case sensitivity
 and duplicate sections are allowed, it's up to the implementation class
 to decide what to do with them.
+
+mINI never raises exceptions by itself. It works line by line. The only
+public method is `ReadLine(String line)`. It calls `OnUnknown(String line)`
+when a given line can't be read.
 
 ### Portability
 
@@ -48,8 +52,9 @@ It has no external dependencies.
 
 ### Status
 
-This is mostly in beta state. I'll be using it for GaGa (another project).
-After enough testing, if no issues are found, I'll consider it completed.
+This program is feature-complete and has no known bugs. Unless new issues
+are reported or requests are made I plan no further development on it other
+than maintenance.
 
 ### License
 
