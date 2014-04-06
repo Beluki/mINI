@@ -7,8 +7,8 @@ user clicks on it. Most readers I tried were either overkill, too slow
 for realtime reloading or didn't support nested sections.
 
 mINI is stateless and does nothing by itself. It doesn't build data
-structures to hold the INI file contents either. It's an abstract class
-with a bunch of virtual methods. You override the methods to decide what
+structures to hold the INI file contents. It's an abstract class with
+a bunch of virtual methods. You override the methods to decide what
 to do with your data.
 
 For example, you override `OnSection(String section)` to do something when
@@ -40,9 +40,9 @@ Blank lines can trigger custom actions with `OnEmpty()`. Case sensitivity
 and duplicate sections are allowed, it's up to the implementation class
 to decide what to do with them.
 
-mINI never raises exceptions by itself. It works line by line. The only
-public method is `ReadLine(String line)`. It calls `OnUnknown(String line)`
-when a given line can't be read.
+mINI never raises exceptions. It works line by line. The only public method
+is `ReadLine(String line)`. When a line can't be read, it calls
+`OnUnknown(String line)`.
 
 ### Portability
 

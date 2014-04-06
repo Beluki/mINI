@@ -190,10 +190,10 @@ namespace mINI
         {
             String trimmed_line = line.Trim();
 
-            if ((ReadEmpty(trimmed_line)
+            if (ReadEmpty(trimmed_line)
                || ReadComment(trimmed_line)
                || ReadSection(trimmed_line)
-               || ReadKeyValue(trimmed_line)))
+               || ReadKeyValue(trimmed_line))
                 return;
 
             // not trimmed:
