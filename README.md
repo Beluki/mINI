@@ -1,8 +1,8 @@
 
-### About
+## About
 
 mINI is a very minimal [INI][] reader. I wrote it because I needed to
-populate a ContextMenuStrip at runtime from an INI file each time the
+populate a ContextMenu at runtime from an INI file each time the
 user clicks on it. Most readers I tried were either overkill, too slow
 for realtime reloading or didn't support nested sections.
 
@@ -16,9 +16,12 @@ a section is found or `OnValueEmpty(String key)` to report an error when
 a key has no value. The default implementation for all methods does nothing,
 so you only need to override the ones you want to handle.
 
+mINI is currently used on [GaGa][], a minimal radio player for the Windows tray.
+
+[GaGa]: https://github.com/Beluki/GaGa
 [INI]: http://en.wikipedia.org/wiki/INI_file
 
-### INI syntax
+## INI syntax
 
 mINI supports the following syntax:
 
@@ -44,19 +47,19 @@ mINI never raises exceptions. It works line by line. The only public method
 is `ReadLine(String line)`. When a line can't be read, it calls
 `OnUnknown(String line)`.
 
-### Portability
+## Portability
 
 mINI is tested on Windows 7 and 8, using the .NET Framework 4.0+.
 Older versions of .NET all the way back to 2.0 should work. Mono should work.
 It has no external dependencies.
 
-### Status
+## Status
 
 This program is feature-complete and has no known bugs. Unless new issues
 are reported or requests are made I plan no further development on it other
 than maintenance.
 
-### License
+## License
 
 Like all my hobby projects, this is Free Software. See the [Documentation][]
 folder for more information. No warranty though.
