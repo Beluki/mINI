@@ -53,6 +53,14 @@ mINI is tested on Windows 7 and 8, using the .NET Framework 4.0+.
 Older versions of .NET all the way back to 2.0 should work. Mono should work.
 It has no external dependencies.
 
+## Alternatives
+
+mINI is simple and lightweight, but sometimes you need a full-featured library
+that can also write to INI files, merge them, etc... For those cases, I recommend
+[ini-parser][].
+
+[ini-parser]: https://github.com/rickyah/ini-parser
+
 ## Status
 
 This program is feature-complete and has no known bugs. Unless new issues
