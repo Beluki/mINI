@@ -16,10 +16,13 @@ a section is found or `OnValueEmpty(String key)` to report an error when
 a key has no value. The default implementation for all methods does nothing,
 so you only need to override the ones you want to handle.
 
-mINI is currently used on [GaGa][], a minimal radio player for the Windows tray.
+mINI is currently used on both [GaGa][], a radio player for the Windows tray
+and on [Yava][] a portable game/emulator launcher.
+
+[INI]: http://en.wikipedia.org/wiki/INI_file
 
 [GaGa]: https://github.com/Beluki/GaGa
-[INI]: http://en.wikipedia.org/wiki/INI_file
+[Yava]: https://github.com/Beluki/Yava
 
 ## INI syntax
 
@@ -73,5 +76,5 @@ I plan no further development on it other than maintenance.
 Like all my hobby projects, this is Free Software. See the [Documentation][]
 folder for more information. No warranty though.
 
-[Documentation]: https://github.com/Beluki/mINI/tree/master/Documentation
+[Documentation]: Documentation
 
